@@ -24,14 +24,15 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-// mongoose.connect("mongodb://localhost:27017/accountingDB", {useNewUrlParser: true});
+mongoose.connect("mongodb://localhost:27017/accountingDB", {useNewUrlParser: true});
 
-mongoose.connect("mongodb+srv://admin-bherth:Test123@cluster0.hjeikps.mongodb.net/accountingDB?retryWrites=true&w=majority",
-{
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}
-);
+// mongoose.connect("mongodb+srv://admin-bherth:Test123@cluster0.hjeikps.mongodb.net/accountingDB?retryWrites=true&w=majority",
+
+// {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// }
+// );
 
 const Schema = mongoose.Schema;
 
