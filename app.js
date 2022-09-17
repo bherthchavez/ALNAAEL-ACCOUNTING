@@ -27,7 +27,6 @@ app.use(passport.session());
 // mongoose.connect("mongodb://localhost:27017/accountingDB", {useNewUrlParser: true});
 
 mongoose.connect("mongodb+srv://admin-bherth:Test123@cluster0.hjeikps.mongodb.net/accountingDB?retryWrites=true&w=majority",
-
 {
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -1292,6 +1291,31 @@ app.post("/bank-accounts", (req, res)=>{
   account.save();
   alert = 1;
   res.redirect("/bank-accounts");
+  }else{
+    res.redirect("/sign-in");
+  }
+});
+
+app.post("/update-bank-accounts", (req, res)=>{
+  if (req.isAuthenticated()){
+
+    bank_account.findOneAndUpdate({_id: req.body.accountID},
+      {$set: {bank_name:  req.body.bankName,
+        account_name:  req.body.ownerName,
+        account_number: req.body.accountNumber, 
+        account_type:  req.body.accountType,
+        bank_email: req.body.bankEmail,
+        updated_at: Date.now()
+      }}, function(err, foundList){
+      if (!err){
+        alert=3;
+        res.redirect("/bank-accounts");
+      }else{
+        console.log(err);
+      }
+
+    });
+  
   }else{
     res.redirect("/sign-in");
   }

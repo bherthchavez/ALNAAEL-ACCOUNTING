@@ -109,16 +109,6 @@
             </div>
           </li>
         </ul>
-        <div class="my-2 my-md-0 flex-grow-1 flex-md-grow-0 order-first order-md-last">
-          <form action="." method="get">
-            <!-- <div class="input-icon">
-              <span class="input-icon-addon">
-                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="10" cy="10" r="7" /><line x1="21" y1="21" x2="15" y2="15" /></svg>
-              </span>
-              <input type="text" value="" class="form-control" placeholder="Search…" aria-label="Search in website">
-            </div> -->
-          </form>
-        </div>
       </div>
     </div>
   </div>
@@ -207,11 +197,12 @@
                                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><circle cx="12" cy="12" r="1" /><circle cx="12" cy="19" r="1" /><circle cx="12" cy="5" r="1" /></svg>
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-end">
-                                  
-                                  <form action="/viewAccount" method="post">
-                                  <button href="/view-update-account" name="viewAccount" value="<%=account._id%>" class="dropdown-item">Edit / View</button>
-                                  </form>
-                                    <a  class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#modal-deleteAccount<%=account._id%>">Delete</a>
+                              
+                                 
+                                  <a  class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-addAccount<%=account._id%>">Edit / View</button>
+                                 
+
+                                    <a  class="dropdown-item text-danger" data-bs-toggle="modal" data-bs-target="#modal1-deleteAccount<%=account._id%>">Delete</a>
                                 </div>
                               </div>
                             </div>
@@ -248,11 +239,6 @@
                             <form action="/create-voucher" method="post">
                               <button type="submit" name="accountID" value="<%=account._id%>" class="btn btn-white btn-pill"> New Transaction </button>
                             </form>
-               
-                    
-                            <!-- <form action="/voucher-item" method="post">
-                              <button type="submit" name="accountID" value="<%=account._id%>" class="btn btn-white btn-pill my-2"> Voucher Items </button>
-                            </form> -->
                           </td>
                         </tr>
                        
@@ -285,6 +271,85 @@
                             </div>
                           </div>
                         </div>
+
+
+                        <div class="modal modal-blur fade" id="modal-addAccount<%=account._id%>" tabindex="-1"  role="dialog" aria-hidden="true">
+                          <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content">
+                              <form action="/update-bank-accounts" method="post">
+                                <div class="modal-header">
+                                  <h5 class="modal-title">New Bank Account</h5>
+                                  <button  type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-lg-6">
+                                      <div class="mb-3">
+                                        <label class="form-label">Bank Full Name</label>
+                                        <div class="input-group input-group-flat">
+                                          <input type="text" name="bankName" class="form-control" value="<%=account.bank_name%>" required />
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                      <div class="mb-3">
+                                        <label class="form-label">Account Owner Name</label>
+                                        <input type="text" name="ownerName" class="form-control" value="<%=account.account_name%>" required/>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                      <div class="mb-3">
+                                        <label class="form-label">Account Number</label>
+                                        <input type="text" name="accountNumber" class="form-control" value="<%=account.account_number%>" required/>
+                                      </div>
+                                    </div>
+                                    <div class="col-lg-6">
+                                      <div class="mb-3">
+                                        <label class="form-label">Account Type</label>
+                                        <select class="form-select" name="accountType" required>
+                                          <option value="Current Account"<%=account.account_type==='Current Account' ? 'selected' : '' %>>Current Account</option>
+                                          <option value="Fixed Deposit"<%=account.account_type==='Fixed Deposit' ? 'selected' : '' %>>Fixed Deposit</option>
+                                          <option value="Fusion Account"<%=account.account_type==='Fusion Account' ? 'selected' : '' %>>Fusion Account</option>
+                                        </select>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="modal-body">
+                                  <div class="row">
+                                    <div class="col-lg-6">
+                                      <div class="mb-3">
+                                        <label class="form-label">Bank Email</label>
+                                        <input type="email" name="bankEmail" class="form-control" value="<%=account.bank_email%>" required/>
+                                      </div>
+                                    </div>
+                                    
+                                    <!-- <div class="col-lg-6">
+                                      <div class="mb-3">
+                                        <label class="form-label">Opening Balance</label>
+                                        <input  type="text" class="form-control"  name="openingBalance" value="" required placeholder="0.0"/>
+                                      </div>
+                                    </div> -->
+                                 
+                                  </div>
+                                </div>
+                                <div class="modal-footer">
+                                  <a href="#" class="btn btn-link link-secondary"  data-bs-dismiss="modal" > Cancel </a>
+                                  <button type="submit" name="accountID" value="<%=account._id%>" class="btn btn-primary ms-auto" >
+                                    <svg xmlns="http://www.w3.org/2000/svg"class="icon icon-tabler icon-tabler-device-floppy"width="24"height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                                      <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
+                                      <path  d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2"></path>
+                                      <circle cx="12" cy="14" r="2"></circle>
+                                      <polyline points="14 4 14 8 8 8 8 4"></polyline>
+                                    </svg> 
+                                    Save
+                                  </button>
+                                </div>
+                              </form>
+                            </div>
+                          </div>
+                        </div>
+                        
 
                         <%  }) %>
                       </tbody>
