@@ -24,7 +24,14 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-mongoose.connect("mongodb://localhost:27017/accountingDB", {useNewUrlParser: true});
+// mongoose.connect("mongodb://localhost:27017/accountingDB", {useNewUrlParser: true});
+
+mongoose.connect("mongodb+srv://admin-bherth:Test123@cluster0.hjeikps.mongodb.net/accountingDB?retryWrites=true&w=majority",
+{
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}
+);
 
 const Schema = mongoose.Schema;
 
@@ -840,8 +847,7 @@ app.post("/supplier-billed", (req,res) =>{
 
 
                       if (req.body.paymentMode === "Bank Transfer"){
-                       
-                        console.log("Bank Transfer Here")
+
                         const transfer = new bank_transfer({
                           payment_voucher_no: req.body.pavNo,
                           b_name:  foundSuppItem.beneficiary_name,
@@ -1218,9 +1224,6 @@ app.post("/view-voucher", (req,res)=>{
           supplier_bill.find({bill_number: { $in: foundVoucher.selected_bill_no}}, function(errBill, foundBills){
             
             if(!errBill){
-
-                console.log(foundVoucher.selected_bill_no);
-                console.log(foundBills);
                 
                 res.render("view-voucher", {foundBills: foundBills, foundItems: foundVoucher,userName: req.user.name, userRole: req.user.userRole});
             
