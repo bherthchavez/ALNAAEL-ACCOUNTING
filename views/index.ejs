@@ -108,23 +108,119 @@
               <div class="col-md-12 col-lg-12">
                 <div class="card">
                   <div class="card-header hd-right">
-                   
-                    <div class="row align-items-center">
-                      <div class="col">
-                         <h3 class="card-title">Payment Transaction List</h3>
-                        
-                       </div>
-                       <div class="col-auto">
+                    <div class="row row-cards">
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-status-top bg-yellow"></div>
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                            
+                              <div class="col">
+                                
+                                <div class="fw-bold fs-1">
+                                  <%=  voucherItems.length %>
+                                </div>
+                                <div class="text-muted">
+                                  Total Transactions
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+               
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-body">
+                            <div class="card-status-top bg-blue"></div>
+                            <div class="row align-items-center">
+                          
+                              <div class="col">
+                                <div class="fw-bold fs-1">
+                                  <%  var sumOfCC = 0 %>
+                                  <%  voucherItems.forEach(function(item){ %>
+                                    <%  if(item.payment_mode !="Bank Transfer"){ %>
+                                    <%  sumOfCC += + item.total_payment %>
+                                    <% } %>
+                                    <%  }) %>
+                                  
+                                    <%= (sumOfCC).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %>
+                                 <span class="text-muted fs-3">QAR</span>
+                                </div>
+                                <div class="text-muted">
+                                  Total Cash and Cheque
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-body">
+                            <div class="card-status-top bg-blue"></div>
+                            <div class="row align-items-center">
+                          
+                              <div class="col">
+                                <div class="fw-bold fs-1">
+                                  <%  var sumOfBT = 0 %>
+                                  <%  voucherItems.forEach(function(item){ %>
+                                    <%  if(item.payment_mode ==="Bank Transfer"){ %>
+                                    <%  sumOfBT += + item.total_payment %>
+                                    <% } %>
+                                    <%  }) %>
+                                  
+                                    <%= (sumOfBT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %>
+                                 <span class="text-muted fs-3">QAR</span>
+                                </div>
+                                <div class="text-muted">
+                                  Total Bank Transfer
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-sm-6 col-lg-3">
+                        <div class="card card-sm">
+                          <div class="card-status-top bg-green"></div>
+                          <div class="card-body">
+                            <div class="row align-items-center">
+                           
+                              <div class="col">
+                               
+                                <div class="fw-bold fs-1">
+                                  <%  var sumOfTotal = 0 %>
+                                  <%  voucherItems.forEach(function(item){ %>
+                                    <%  sumOfTotal += + item.total_payment %>
+                                    <%  }) %>
+                                    <%=  (sumOfTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %>
+                                    <span class="text-muted fs-3">QAR</span> 
+                                </div>
+                                <div class="text-muted">
+                                  Total Withdrawal
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
+                    </div>
+                  </div>
+
+                  <div class="card-body border-bottom py-3">
+                    <div class="d-flex">
+                      <h3>Transactions</h3>
+                      <div class="ms-auto text-muted">
                         <div class="input-icon">
                           <span class="input-icon-addon">
                             <i class="ti ti-search"></i>
                           </span>
-                          <input type="text" id="searchPV"  class="form-control" placeholder="Search…" aria-label="Search in website">
-                        </div>                
+                          <input type="text" id="searchPV"  class="form-control" placeholder="Search here…" aria-label="Search">
+                        </div>   
                       </div>
                     </div>
-             
                   </div>
                   <div class="card-table table-responsive">
 
@@ -149,7 +245,7 @@
                           <tr>
                             <td>
                               <form action="/view-voucher" method="post">
-                                <button action="submit" value="<%=item.payment_voucher_no%>" name="pavNO" class="btn btn-outline-secondary w-70 btn-sm">
+                                <button action="submit" value="<%=item.payment_voucher_no%>" name="pavNO" class="btn btn-outline-secondary w-70 btn-sm ">
                                   <%=item.payment_voucher_no%>
                                 </button>
                               </form>
@@ -183,7 +279,7 @@
      
                             <td>
                               <div class="currency-formated">QAR</div> 
-                              <div class="text-danger d-md-inline-flex"> <%= (item.total_payment).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')%></div>
+                              <div class="text-success  d-md-inline-flex fw-bold"> <%= (item.total_payment).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')%></div>
                              
                             </td>
                             <td>
