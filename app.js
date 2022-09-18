@@ -55,6 +55,8 @@ passport.deserializeUser(User.deserializeUser());
 
 
 let alert = 0;
+let alertSetBill = 0;
+let alertSetPay = 0;
 
 const bank_accountsSchema = {
   bank_name: String,
@@ -1720,9 +1722,10 @@ app.get("/system-settings", (req, res)=>{
 
       settings.findOne({name: "bill_settings"}, (err, billSetting)=>{
         settings.findOne({name: "payment_voucher_settings"}, function(err, PAVSetting){
-
-          res.render("system-settings", {billSetting: billSetting,PAVSetting:PAVSetting, userName: req.user.name, userRole: req.user.userRole, alert: alert});
+          res.render("system-settings", {billSetting: billSetting,PAVSetting:PAVSetting, userName: req.user.name, userRole: req.user.userRole, alert: alert, alertSetBill: alertSetBill, alertSetPay: alertSetPay});
           alert=0;  
+          alertSetBill= 0;
+          alertSetPay=0;
            
          });
       });
@@ -1737,27 +1740,63 @@ app.get("/system-settings", (req, res)=>{
 
 app.post("/update-system-settings", (req,res)=>{
   if (req.isAuthenticated()){
-    
-    settings.findOneAndUpdate({_id: req.body.billID},
-      {$set: {prefix:  req.body.billPrefix,
-        starting_no:  req.body.billStartingNo}}, (err, billFound)=>{
-      if (!err){
 
 
-        settings.findOneAndUpdate({_id: req.body.payID},
-          {$set: {prefix:  req.body.payPrefix,
-          starting_no:  req.body.payStartingNo}}, (err2, payFound) =>{
-            if (!err2){
-              alert=3;
-              res.redirect("/system-settings");
+
+    let billNo = req.body.billPrefix + req.body.billStartingNo;
+    let payNo =  req.body.payPrefix + req.body.payStartingNo;
+
+
+        supplier_bill.find({bill_number: billNo}, function(err, supBill){ 
+          if (!err){
+        
+
+            if(supBill.length ==0){
+
+              settings.findOneAndUpdate({_id: req.body.billID},
+                {$set: {prefix:  req.body.billPrefix,
+                  starting_no:  req.body.billStartingNo}}, (err, billFound)=>{
+                    if (err){
+                      console.log(err)
+                    }else{
+                      alertSetBill = 1;
+                    }
+                   
+                  });
+
+            }else{
+              alertSetBill = 2;
             }
-          });
-      
-      }else{
-        console.log(err);
-      }
-    });
+          } 
+        });
+ 
+ 
 
+        payment_voucher.find({payment_voucher_no: payNo}, function(err, payVouBill){ 
+          if (!err){
+
+            if(payVouBill.length == 0){
+
+              settings.findOneAndUpdate({_id: req.body.payID},
+                {$set: {prefix:  req.body.payPrefix,
+                starting_no:  req.body.payStartingNo}}, (err2, payFound) =>{
+                  if (err2){
+                    console.log(err)
+                   
+                  
+                  } else {
+
+                    alertSetPay= 1;
+                  }
+            });
+        }else{
+          alertSetPay = 2;
+        }
+      }
+        });
+
+        alert = 3;
+        res.redirect("/system-settings");
   }else{
     res.redirect("/sign-in");
   }
