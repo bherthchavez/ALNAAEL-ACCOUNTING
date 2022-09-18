@@ -156,7 +156,7 @@
                                     <label class="form-label">Bill Prefix</label>
                                     <small class="form-hint mb-2">Eg: PUV/2022</small>
                                     <div>
-                                      <input type="text" name="billPrefix" value="<%= billSetting.prefix %>" class="form-control" required>
+                                      <input type="text" name="billPrefix" value="<%= billSetting.prefix %>" class="form-control" required readonly/> 
                                      
                                     </div>
                                   </div>
@@ -165,9 +165,8 @@
                                     <label class="form-label">Bill Starting Number</label>
                                     <small class="form-hint mb-2">This will be the next bill number.</small>
                                     <div>
-                                      <input type="number" name="billStartingNo" value="<%= billSetting.starting_no %>" class="form-control billNo" required>
-                                      <!-- <small class="form-hint text-danger billExist">Bill No already exist. <br> Please enter different prefix and starting number.</small> -->
-
+                                      <input type="number" name="billStartingNo" value="<%= billSetting.starting_no %>" class="form-control billNo" required/>
+                                      <input type="number" name="actualBillStartingNo" value="<%= billSetting.starting_no %>" class="form-control actualBillNo" hidden/>
                                     </div>
                                   </div>
                           </div>    
@@ -177,7 +176,7 @@
                                     <label class="form-label">Payment Voucher Prefix</label>
                                     <small class="form-hint mb-2">Eg: #PAV/2022</small>
                                     <div>
-                                      <input type="text" name="payPrefix" value="<%= PAVSetting.prefix %>" class="form-control" required>
+                                      <input type="text" name="payPrefix" value="<%= PAVSetting.prefix %>" class="form-control" required readonly/>
                                    
                                     </div>
                                   </div>
@@ -186,10 +185,10 @@
                                     <label class="form-label">Payment Voucher Starting Number</label>
                                     <small class="form-hint mb-2">This will be the next Payment Voucher number.</small>
                                     <div>
-                                      <input type="number" name="payStartingNo" value="<%= PAVSetting.starting_no %>" class="form-control" required>
+                                      <input type="number" name="payStartingNo" value="<%= PAVSetting.starting_no %>" class="form-control" required/>
+                                      <input type="number" name="actualPayStartingNo" value="<%= PAVSetting.starting_no %>" class="form-control actualPayNo" hidden/>
                                       <input type="text" name="payID" value="<%= PAVSetting._id %>" class="form-control payID" hidden>
                                     
-                                      <!-- <small class="form-hint text-danger payExist">Payment Voucher already exist. <br> Please enter different prefix and starting number.</small> -->
           
                                     </div>
                                   </div>
@@ -249,12 +248,18 @@
   var getAlertBill = + "<%= alertSetBill %>";
   var getAlertPay = + "<%= alertSetPay %>";
   if(getAlertBill == 1){
-    $('.billNo').after('<small class="form-hint text-success billExist">Bill No Prefix and starting number succesfully saved.</small>');
+    $('.billNo').after('<small class="form-hint text-success billExist">Bill Number Prefix and starting number succesfully saved.</small>');
     setTimeout(function () {
       $('.billExist').remove();
       }, 10000);
   }else if (getAlertBill == 2) {
-    $('.billNo').after('<small class="form-hint text-danger billExist">Bill No already exist. <br> Please enter different prefix and starting number.</small>');
+    $('.billNo').after('<small class="form-hint text-danger billExist">Bill Number already exist. <br> Please enter different prefix and starting number.</small>');
+      setTimeout(function () {
+        $('.billExist').remove();
+      }, 10000);
+  }else if (getAlertBill == 3) {
+    
+    $('.billNo').after('<small class="form-hint text-danger billExist">Bill Number should greater than current next bill no.</small>');
       setTimeout(function () {
         $('.billExist').remove();
       }, 10000);
@@ -267,6 +272,12 @@
       }, 10000);
   }else if (getAlertPay == 2) {
     $('.payID').after('<small class="form-hint text-danger payExist">Payment Voucher already exist. <br> Please enter different prefix and starting number.</small>');
+      setTimeout(function () {
+        $('.payExist').remove();
+      }, 10000);
+  }else if (getAlertPay == 3) {
+    
+    $('.payID').after('<small class="form-hint text-danger billExist">Bill Number should greater than current next bill no.</small>');
       setTimeout(function () {
         $('.payExist').remove();
       }, 10000);
