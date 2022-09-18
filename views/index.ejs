@@ -124,6 +124,11 @@
                                   Total Transactions
                                 </div>
                               </div>
+                              <div class="col-auto">
+                                <span class="bg-red-lt avatar fs-2 ">
+                                  <i class="ti ti-list-numbers"></i>
+                                 </span>
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -131,12 +136,14 @@
                
                       <div class="col-sm-6 col-lg-3">
                         <div class="card card-sm">
+                          <!-- <div class="card-status-start bg-blue"></div> -->
                           <div class="card-body">
-                            <div class="card-status-top bg-blue"></div>
+                           
                             <div class="row align-items-center">
                           
                               <div class="col">
                                 <div class="fw-bold fs-1">
+                                  <span class="text-muted fs-5 fw-normal">QAR</span>
                                   <%  var sumOfCC = 0 %>
                                   <%  voucherItems.forEach(function(item){ %>
                                     <%  if(item.payment_mode !="Bank Transfer"){ %>
@@ -145,11 +152,16 @@
                                     <%  }) %>
                                   
                                     <%= (sumOfCC).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %>
-                                 <span class="text-muted fs-3">QAR</span>
+                                 
                                 </div>
                                 <div class="text-muted">
                                   Total Cash and Cheque
                                 </div>
+                              </div>
+                              <div class="col-auto">
+                                <span class="bg-green-lt avatar fs-2 ">
+                                  <i class="ti ti-cash"></i>
+                                 </span>
                               </div>
                             </div>
                           </div>
@@ -158,11 +170,13 @@
                       <div class="col-sm-6 col-lg-3">
                         <div class="card card-sm">
                           <div class="card-body">
-                            <div class="card-status-top bg-blue"></div>
+                            <!-- <div class="card-status-top bg-blue"></div> -->
                             <div class="row align-items-center">
                           
                               <div class="col">
+                               
                                 <div class="fw-bold fs-1">
+                                  <span class="text-muted fs-5 fw-normal">QAR</span>
                                   <%  var sumOfBT = 0 %>
                                   <%  voucherItems.forEach(function(item){ %>
                                     <%  if(item.payment_mode ==="Bank Transfer"){ %>
@@ -171,11 +185,16 @@
                                     <%  }) %>
                                   
                                     <%= (sumOfBT).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %>
-                                 <span class="text-muted fs-3">QAR</span>
+                              
                                 </div>
                                 <div class="text-muted">
                                   Total Bank Transfer
                                 </div>
+                              </div>
+                              <div class="col-auto">
+                                <span class="bg-green-lt avatar fs-2 ">
+                                  <i class="ti ti-cash"></i>
+                                 </span>
                               </div>
                             </div>
                           </div>
@@ -183,23 +202,29 @@
                       </div>
                       <div class="col-sm-6 col-lg-3">
                         <div class="card card-sm">
-                          <div class="card-status-top bg-green"></div>
+                          <!-- <div class="card-status-top bg-green"></div> -->
                           <div class="card-body">
                             <div class="row align-items-center">
                            
                               <div class="col">
                                
                                 <div class="fw-bold fs-1">
+                                  <span class="text-muted fs-5 fw-normal">QAR</span>
                                   <%  var sumOfTotal = 0 %>
                                   <%  voucherItems.forEach(function(item){ %>
                                     <%  sumOfTotal += + item.total_payment %>
                                     <%  }) %>
                                     <%=  (sumOfTotal).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') %>
-                                    <span class="text-muted fs-3">QAR</span> 
+                                    
                                 </div>
                                 <div class="text-muted">
                                   Total Withdrawal
                                 </div>
+                              </div>
+                              <div class="col-auto">
+                                <span class="bg-green-lt avatar fs-2 ">
+                                  <i class="ti ti-cash"></i>
+                                 </span>
                               </div>
                             </div>
                           </div>

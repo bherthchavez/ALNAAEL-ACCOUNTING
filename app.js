@@ -1105,16 +1105,9 @@ app.post("/supplier-bill", (req,res)=>{
           }
         });
 
-        settings.findOne({name: "bill_settings"}, function(err, billSetting){
-        
-          let puvno = parseFloat(billSetting.starting_no) + 1;
+       
 
-              settings.findOneAndUpdate({name: "bill_settings"},
-                {$set: {starting_no:  puvno}}, function(err, foundList){
-              });
-          });    
-
-          const totalPayment = + (req.body.totalPayment).split(',').join('');
+        const totalPayment = + (req.body.totalPayment).split(',').join('');
 
         const bill = new supplier_bill({
           supplier_id:  req.body.accountID,
@@ -1189,7 +1182,14 @@ app.post("/supplier-bill", (req,res)=>{
 
              } 
                   
-          
+             settings.findOne({name: "bill_settings"}, function(err, billSetting){
+        
+              let puvno = parseFloat(billSetting.starting_no) + 1;
+    
+                  settings.findOneAndUpdate({name: "bill_settings"},
+                    {$set: {starting_no:  puvno}}, function(err, foundList){
+                  });
+              });  
 
           }
         });
