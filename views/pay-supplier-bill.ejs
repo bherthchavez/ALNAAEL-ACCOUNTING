@@ -271,7 +271,8 @@
                                                     <%=bill.bill_number%>
                                                   </td>
                                                   <td>
-                                                    <%=bill.bill_date%>
+                                                    <%=(new Date(bill.bill_date).toLocaleDateString("en-US", {year: 'numeric', month: 'short', day: 'numeric' }))%>
+
                                                   </td>
                                                   <td>
                                                     <%=bill.description%>
@@ -304,11 +305,11 @@
                                               <thead>
                                                 <tr>
                                                   <th class="w-1"></th>
-                                                  <th class="w-10">Cheque Number</th>
-                                                  <th  class="w-17">Beneficiary Name</th>
-                                                  <th  class="w-10">Cheque Date</th>
-                                                  <th  class="w-10">Cheque Status</th>
-                                                  <th  class="text-end w-10">	 Amount</th>
+                                                  <th >Cheque Number</th>
+                                                  <th  >Beneficiary Name</th>
+                                                  <th  >Cheque Date</th>
+                                                  <th  >Cheque Status</th>
+                                                  <th  class="text-end">	 Amount</th>
                                                 </tr>
                                               </thead> 
                                                     <tbody>
@@ -340,11 +341,11 @@
                                               <thead>
                                                 <tr>
                                                   <th class="w-1"></th>
-                                                  <th class="w-10">Cheque Number</th>
-                                                  <th  class="w-17">Beneficiary Name</th>
-                                                  <th  class="w-10">Cheque Date</th>
-                                                  <th  class="w-10">Cheque Status</th>
-                                                  <th  class="text-end w-10">	 Amount</th>
+                                                  <th >Cheque Number</th>
+                                                  <th  >Beneficiary Name</th>
+                                                  <th >Cheque Date</th>
+                                                  <th  >Cheque Status</th>
+                                                  <th  class="text-end">	 Amount</th>
                                                 </tr>
                                               </thead> 
                                                     <tbody>
@@ -536,7 +537,7 @@
          
 
             cols +=  '<td><select name="chequeStatus" class="form-select" required><option value="PDC">PDC</option><option value="Cleared">Cleared</option></select></td>';
-            cols +=  '<td ><input type="text" name="chequeAmount" class="chequeAmount form-control form-control-rounded text-end pe-4" placeholder="0.0" required> </td></tr>';
+            cols +=  '<td ><input type="text" name="chequeAmount" class="chequeAmount form-control form-control-rounded text-end pe-3" placeholder="0.0" required> </td></tr>';
 
          
           $('#tableAddAcc').append(cols);
@@ -578,7 +579,7 @@
          
 
             cols +=  '<td><select name="chequeStatus" class="form-select" required><option value="PDC">PDC</option><option value="Cleared">Cleared</option></select></td>';
-            cols +=  '<td ><input type="text" name="chequeAmount" class="chequeAmount form-control form-control-rounded text-end pe-4" placeholder="0.0" required> </td></tr>';
+            cols +=  '<td ><input type="text" name="chequeAmount" class="chequeAmount form-control form-control-rounded text-end pe-3" placeholder="0.0" required> </td></tr>';
 
          
           $('#tableAddcash').append(cols);

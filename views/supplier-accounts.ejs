@@ -233,7 +233,13 @@
                             </div>
                           </td>
                           <td>
-                            <div class="text-formated-tbl"> <%=account.supplier_name%> </div>
+                            <div class="text-formated-tbl"> <%=account.supplier_name%> 
+                              <a href="#" class="ms-1 fs-5" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Bill Created">
+
+                                <% if( parseFloat(account.created_bills) > 0 ) {%>
+                                  <span class="badge bg-blue-lt ms-2"><%= parseFloat(account.created_bills) %></span>
+                                  <% } %>
+                                </a></div>
                             <div class="text-muted"> <%=account.a_name%> </div>
                           </td>
                       
@@ -259,7 +265,7 @@
                           
                     
                             <form action="/pay-supplier-bill" method="post">
-                              <button type="submit" name="accountID" value="<%=account._id%>" class="btn btn-outline-warning btn-sm btn-pill ms-2"> Pay Bill </button>
+                              <button type="submit" name="accountID" value="<%=account._id%>" class="btn btn-outline-warning btn-sm btn-pill ms-2"> Pay Bill </button> 
                             </form>
                           </div>
                           </td>

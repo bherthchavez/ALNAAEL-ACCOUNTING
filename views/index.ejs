@@ -104,6 +104,7 @@
         <div class="page-body">
           <div class="container-xl">
             <div class="row row-deck row-cards">
+              
 
               <div class="col-md-12 col-lg-12">
                 <div class="card">
@@ -161,7 +162,7 @@
                               </div>
                               <div class="col-auto">
                                 <span class="bg-green-lt avatar fs-2 ">
-                                  <i class="ti ti-cash"></i>
+                                  <i class="ti ti-cash-banknote"></i>
                                  </span>
                               </div>
                             </div>
@@ -194,7 +195,7 @@
                               </div>
                               <div class="col-auto">
                                 <span class="bg-green-lt avatar fs-2 ">
-                                  <i class="ti ti-cash"></i>
+                                  <i class="ti ti-cash-banknote"></i>
                                  </span>
                               </div>
                             </div>
@@ -224,7 +225,7 @@
                               </div>
                               <div class="col-auto">
                                 <span class="bg-green-lt avatar fs-2 ">
-                                  <i class="ti ti-cash-banknote"></i>
+                                  <i class="ti ti-cash"></i>
                                  </span>
                               </div>
                             </div>
@@ -254,12 +255,11 @@
                       <table class="table card-table table-vcenter text-nowrap datatable">
                         <thead>
                           <tr>
-                            <th>Voucher No.</th>
-                            <th>Date</th>
+                            <th>Transaction  No</th> 
+                            <th> Date</th>
                             <th>Payment From</th>
                             <th>Payment Mode</th>
                             <th>Description</th>
-                            
                             <th>Amount</th>
                             <th>Created By</th>
                             <th>Status</th>
@@ -271,15 +271,15 @@
                           <tr>
                             <td>
                               <form action="/view-voucher" method="post">
-                                <button action="submit" value="<%=item.payment_voucher_no%>" name="pavNO" class="btn btn-outline-secondary w-70 btn-sm ">
+                                <button action="submit" value="<%=item.payment_voucher_no%>" name="pavNO" class="btn btn-outline-secondary w-70 btn-sm " data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Print Payment Voucher">
                                   <%=item.payment_voucher_no%>
                                 </button>
                               </form>
-                             
+                           
                             </td>
-                        
-                            <td>
-                              <%=item.date%>
+                            <td >
+                             
+                                <%=(new Date(item.date).toLocaleDateString("en-US", {year: 'numeric', day: 'numeric', month: 'short' })) %>
                             </td>
                             <td>
                              
@@ -290,7 +290,7 @@
                               <% if(item.payment_mode ==="Bank Transfer"){%>
                                 <form action="/print-bank-voucher" method="post">
                                   <%=item.payment_mode%>
-                                  <button action="submit" value="<%=item.payment_voucher_no%>" name="pavNO" class="btn btn-ghost-dark w-1 btn--small" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-custom-class="custom-tooltip" data-bs-title="Print Bank Letter">
+                                  <button action="submit" value="<%=item.payment_voucher_no%>" name="pavNO" class="btn btn-ghost-dark w-1 btn--small" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Print Bank Letter">
                                     <i class="ti ti-clipboard-text"></i>
                                   </button>
                                   </form>
@@ -303,9 +303,9 @@
                               <%=item.description%>
                             </td>
      
-                            <td>
-                              <div class="currency-formated">QAR</div> 
-                              <div class="text-success  d-md-inline-flex fw-bold"> <%= (item.total_payment).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')%></div>
+                            <td class="text-nowrap text-muted fs-5">
+                             QAR
+                              <div class="text-danger d-md-inline-flex fw-bold fs-3 ms-1"> <%= (item.total_payment).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')%></div>
                              
                             </td>
                             <td>

@@ -92,6 +92,7 @@ const supplier_accountsSchema = {
   paid: Number,
   balance_amount: Number,
   active_status: Number,
+  created_bills: Number,
   created_by:String,
   created_at:Date,
   updated_at:Date
@@ -788,6 +789,144 @@ app.post("/pay-supplier-bill", (req,res) =>{
 
 });
 
+app.post("/supplier-bill", (req,res)=>{
+  if (req.isAuthenticated()){
+
+        const totalPayment = + (req.body.totalPayment).split(',').join('');
+
+        const bill = new supplier_bill({
+          supplier_id:  req.body.accountID,
+          supplier_name: req.body.supplierName,
+          bill_number: req.body.puvNo,
+          bill_date:  req.body.date,
+          documents:  req.body.documents,
+          description:  req.body.description,
+          total_payment: totalPayment,
+          total_items: req.body.numOfItem,
+          status: "Pending",
+          created_by: req.user.name,
+          created_at: Date.now(),
+          updated_at: Date.now()
+        });
+        bill.save( function(err, docs){
+          if(err){
+            console.log(err);
+          }else{
+
+            let totalItem = +  req.body.numOfItem;
+       
+             if (totalItem == 1){
+
+                  let newitem = new bill_item({
+                    bill_number:  req.body.puvNo,
+                    items:  req.body.item,
+                    items_description: req.body.itemDesc,
+                    cost_center:  req.body.costCenter,
+                    inv_no:  req.body.invNo,
+                    inv_date:  req.body.invDate,
+                    lpo:  req.body.lpo,
+                    items_price: + (req.body.price).split(',').join(''),
+                    items_qty: + (req.body.qty).split(',').join(''),
+                    sub_total: +(req.body.total).split(',').join(''), 
+                    created_by:  req.user.name,
+                    created_at: Date.now(),
+                    updated_at: Date.now()
+                  });
+                  newitem.save(function(err, saved){
+                    if(err){
+                      console.log(err);
+                    }
+                  });
+
+             }else{
+              
+              for (var i = 0; i < totalItem; i++){
+
+
+                let newitem = new bill_item({
+                  bill_number:  req.body.puvNo,
+                  items:  req.body.item[i],
+                  items_description: req.body.itemDesc[i],
+                  cost_center:  req.body.costCenter[i],
+                  inv_no:  req.body.invNo[i],
+                  inv_date:  req.body.invDate[i],
+                  lpo:  req.body.lpo[i],
+                  items_price: + (req.body.price[i]).split(',').join(''),
+                  items_qty: + (req.body.qty[i]).split(',').join(''),
+                  sub_total: +(req.body.total[i]).split(',').join(''), 
+                  created_by:  req.user.name,
+                  created_at: Date.now(),
+                  updated_at: Date.now()
+                });
+                newitem.save(function(err, saved){
+                  if(err){
+                    console.log(err);
+                  }
+                });
+              }
+
+             } 
+
+             let totalBilled = 0;
+      
+       
+             supplier_account.findOne({_id: req.body.accountID}, function(err, foundItem){ 
+             if (err){
+               console.log(err);
+             }else{
+
+                  supplier_bill.find({supplier_id: req.body.accountID, status: 'Pending' }, function(err, supBills){ 
+             
+                  
+                 
+                    if(err){
+                      console.log(err)
+                    }else{
+
+                      totalBilled = + foundItem.billed;
+                        
+                      totalBilled += +(req.body.totalPayment).split(',').join('');
+                  
+                        
+                      supplier_account.findOneAndUpdate({_id: req.body.accountID},
+                          {$set: {
+                          billed: totalBilled,
+                          created_bills: supBills.length }}, function(err){
+                            if (err){
+                              console.log(err);
+                            }
+                      });
+
+                    }
+
+                  });
+
+                 }
+              });
+
+                  
+             settings.findOne({name: "bill_settings"}, function(err, billSetting){
+        
+              let puvno = parseFloat(billSetting.starting_no) + 1;
+    
+                  settings.findOneAndUpdate({name: "bill_settings"},
+                    {$set: {starting_no:  puvno}}, function(err, foundList){
+                  });
+              });  
+
+          }
+        });
+
+        alert = 4;
+        res.redirect("/supplier-accounts")
+
+  }else{
+    res.redirect("/sign-in");
+  }
+
+});
+
+
 app.post("/supplier-billed", (req,res) =>{
   if (req.isAuthenticated()){
 
@@ -942,23 +1081,22 @@ app.post("/supplier-billed", (req,res) =>{
 
                     totalPaid +=payment_amount;
                     totalBilled -= payment_amount;
-  
-                      supplier_account.findOneAndUpdate({_id: req.body.supplierID},
-                        {$set: {
-                        billed: totalBilled,
-                        paid: totalPaid }}, function(err){
-                          if (err){
-                            console.log(err);
-                          }
-                      });
 
-                    
+                          supplier_account.findOneAndUpdate({_id: req.body.supplierID},
+                            {$set: {
+                            billed: totalBilled,
+                            paid: totalPaid }}, function(err){
+                              if (err){
+                                console.log(err);
+                              }
+                          });
+
                 
                      // -------------------------------> updating supllier bill status
                       if (parseFloat(req.body.numOfBill) <= 1){
                             
                         supplier_bill.findOneAndUpdate({bill_number: req.body.selectedbillNo},
-                          {$set: {status: "Paid" }}, function(err, foundSupBill){
+                          {$set: {status: 'Paid' }}, function(err, foundSupBill){
                           
                             if (err){
                               console.log(err);
@@ -970,7 +1108,7 @@ app.post("/supplier-billed", (req,res) =>{
                         for(var i = 0; i < req.body.selectedbillNo.length; i++){
                         
                           supplier_bill.findOneAndUpdate({bill_number: req.body.selectedbillNo[i]},
-                            {$set: {status: "Paid" }}, function(err, foundSupBill){
+                            {$set: {status: 'Paid' }}, function(err, foundSupBill){
                            
                               if (err){
                                 console.log(err);
@@ -979,9 +1117,29 @@ app.post("/supplier-billed", (req,res) =>{
 
                          }
                       }
+                   
                     }
 
                   });
+
+                  supplier_account.findOne({_id: req.body.supplierID }, function(err, supBills){ 
+                    
+                    if(err){
+                      console.log(err);
+                    }else{
+                   
+                      supplier_account.findOneAndUpdate({_id: req.body.supplierID},
+                        {$set: {
+                        created_bills: supBills.created_bills - parseFloat(req.body.numOfBill) }}, function(err){
+                          if (err){
+                            console.log(err);
+                          }
+                      });
+    
+                    }
+    
+                  });
+
 
                  // -------------------------------> updating setting for payment voucher number
                   settings.findOne({name: "payment_voucher_settings"}, function(err, billSetting){
@@ -992,7 +1150,6 @@ app.post("/supplier-billed", (req,res) =>{
                         {$set: {starting_no:  pavno}}, function(err, foundList){
                       });
                   }); 
-  
   
                   alert = 4;
                   res.redirect("supplier-accounts");
@@ -1008,6 +1165,8 @@ app.post("/supplier-billed", (req,res) =>{
     res.redirect("/sign-in");
   }
 });
+
+
 
 app.get("/voucher-item", (req,res) =>{
   if (req.isAuthenticated()){
@@ -1080,130 +1239,6 @@ app.post("/payment-voucher", (req,res)=>{
   }
 });
 
-app.post("/supplier-bill", (req,res)=>{
-  if (req.isAuthenticated()){
-
-        let totalBilled = 0;
-      
-       
-          supplier_account.findOne({_id: req.body.accountID,}, function(err, foundItem){ 
-          if (err){
-            console.log(err);
-          }else{
-
-
-          totalBilled = + foundItem.billed;
-          
-          totalBilled += +(req.body.totalPayment).split(',').join('');
-      
-           
-          supplier_account.findOneAndUpdate({_id: req.body.accountID},
-              {$set: {
-              billed: totalBilled }}, function(err){
-                if (err){
-                  console.log(err);
-                }
-            });
-          }
-        });
-
-       
-
-        const totalPayment = + (req.body.totalPayment).split(',').join('');
-
-        const bill = new supplier_bill({
-          supplier_id:  req.body.accountID,
-          supplier_name: req.body.supplierName,
-          bill_number: req.body.puvNo,
-          bill_date:  req.body.date,
-          documents:  req.body.documents,
-          description:  req.body.description,
-          total_payment: totalPayment,
-          total_items: req.body.numOfItem,
-          status: "Pending",
-          created_by: req.user.name,
-          created_at: Date.now(),
-          updated_at: Date.now()
-        });
-        bill.save( function(err, docs){
-          if(err){
-            console.log(err);
-          }else{
-
-            let totalItem = +  req.body.numOfItem;
-       
-             if (totalItem == 1){
-
-                  let newitem = new bill_item({
-                    bill_number:  req.body.puvNo,
-                    items:  req.body.item,
-                    items_description: req.body.itemDesc,
-                    cost_center:  req.body.costCenter,
-                    inv_no:  req.body.invNo,
-                    inv_date:  req.body.invDate,
-                    lpo:  req.body.lpo,
-                    items_price: + (req.body.price).split(',').join(''),
-                    items_qty: + (req.body.qty).split(',').join(''),
-                    sub_total: +(req.body.total).split(',').join(''), 
-                    created_by:  req.user.name,
-                    created_at: Date.now(),
-                    updated_at: Date.now()
-                  });
-                  newitem.save(function(err, saved){
-                    if(err){
-                      console.log(err);
-                    }
-                  });
-
-             }else{
-              
-              for (var i = 0; i < totalItem; i++){
-
-
-                let newitem = new bill_item({
-                  bill_number:  req.body.puvNo,
-                  items:  req.body.item[i],
-                  items_description: req.body.itemDesc[i],
-                  cost_center:  req.body.costCenter[i],
-                  inv_no:  req.body.invNo[i],
-                  inv_date:  req.body.invDate[i],
-                  lpo:  req.body.lpo[i],
-                  items_price: + (req.body.price[i]).split(',').join(''),
-                  items_qty: + (req.body.qty[i]).split(',').join(''),
-                  sub_total: +(req.body.total[i]).split(',').join(''), 
-                  created_by:  req.user.name,
-                  created_at: Date.now(),
-                  updated_at: Date.now()
-                });
-                newitem.save(function(err, saved){
-                  if(err){
-                    console.log(err);
-                  }
-                });
-              }
-
-             } 
-                  
-             settings.findOne({name: "bill_settings"}, function(err, billSetting){
-        
-              let puvno = parseFloat(billSetting.starting_no) + 1;
-    
-                  settings.findOneAndUpdate({name: "bill_settings"},
-                    {$set: {starting_no:  puvno}}, function(err, foundList){
-                  });
-              });  
-
-          }
-        });
-
-        alert = 4;
-        res.redirect("/supplier-accounts")
-
-  }else{
-    res.redirect("/sign-in");
-  }
-
-});
 
 app.post("/view-journal", (req,res)=>{
   if (req.isAuthenticated()){
