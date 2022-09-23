@@ -104,7 +104,68 @@
         <div class="page-body">
           <div class="container-xl">
             <div class="row row-deck row-cards">
-              
+
+
+              <div class="col-md-8">
+                <div class="card">
+                  <div class="card-body">
+                    <div class="d-flex">
+                      <h3 class="card-title">Expenses</h3>
+                      <div class="ms-auto">
+                        <h4 class="text-muted">Current Year - 2022</h4>
+                      </div>
+                    </div>
+                    <div id="chart-tasks-overview"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-md-6 col-lg-4">
+                <div class="card">
+                  <div class="card-header">
+                    <h3 class="card-title">Cost Centers Monthly Total Expenses </h3>
+                  </div>
+                  <table class="table card-table table-vcenter">
+                    <thead>
+                      <tr>
+                        <th>Cost Center</th>
+                        <th class="text-end"> <%-  new Date().toLocaleDateString("en-US", { month: 'long' }) %></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>El Naael Servuce Center </td>
+                        <td class="text-end text-muted fs-5 text-nowrap">
+                          QAR
+                           <div class="text-warning d-md-inline-flex fs-3 ms-1">3,550.00</div>
+                         </td>
+                      </tr>
+                      <tr>
+                        <td>Qatar Eastern Language Center </td>
+                        <td class="text-end text-muted fs-5 text-nowrap">
+                          QAR
+                           <div class="text-warning d-md-inline-flex  fs-3 ms-1">7,500.75</div>
+                         </td>
+                      </tr>
+                      <tr>
+                        <td>El Naael for Consultating and Administrative Services </td>
+                        <td class="text-end text-muted fs-5 text-nowrap">
+                          QAR
+                           <div class="text-warning d-md-inline-flex  fs-3 ms-1">13,550.00</div>
+                         </td>
+                      </tr>
+                      <tr>
+                        <td>Nasser Abulghani & Sons </td>
+                        <td class="text-end text-muted fs-5 text-nowrap">
+                          QAR
+                           <div class="text-warning d-md-inline-flex  fs-3 ms-1">33,550.00</div>
+                         </td>
+                      </tr>
+
+                    </tbody>
+                  </table>
+                </div>
+              </div>
 
               <div class="col-md-12 col-lg-12">
                 <div class="card">
@@ -299,7 +360,7 @@
                                 <%=item.payment_mode%>
                                 <% } %>
                             </td>
-                            <td>
+                            <td class="text-capitalize">
                               <%=item.description%>
                             </td>
      
@@ -351,8 +412,184 @@
           });
           </script>
 
+          <script>
+
+                 var dataArray = [];
+                 var jan = 0;
+                 var feb = 0;
+                 var mar = 0;
+                 var apr = 0;
+                 var may = 0;
+                 var jun = 0;
+                 var jul = 0;
+                 var aug = 0;
+                 var sep = 0;
+                 var oct = 0;
+                 var nov = 0;
+                 var dec = 0;
+                
+
+                  
+
+            '<%  voucherItems.forEach(function(item){ %>'
+             
+            var dMonth = new Date('<%=item.date%>').getMonth() + 1;
+
+            if (dMonth === 1){
+             
+              jan += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 2){
+
+              feb += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 3){
+
+              mar += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 4){
+
+              apr += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 5){
+
+              may += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 6){
+
+              jun += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 7){
+
+              jul += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 8){
+
+              aug += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 9){
+
+              sep += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 10){
+
+              oct += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 11){
+
+              nov += + '<%=item.total_payment%>'
+
+            }else if(dMonth === 12){
+
+              dec += + '<%=item.total_payment%>'
+
+            }
+            
+            ' <%  }) %>'
+                
+                  dataArray[0] = jan;
+                  dataArray[1] = feb;
+                  dataArray[2] = mar;
+                  dataArray[3] = apr;
+                  dataArray[4] = may;
+                  dataArray[5] = jun;
+                  dataArray[6] = jul;
+                  dataArray[7] = aug;
+                  dataArray[8] = sep;
+                  dataArray[9] = oct;
+                  dataArray[10] = nov;
+                  dataArray[11] = dec;
 
 
-        <%- include("create/modals") -%>
-
+           // @formatter:off
+           document.addEventListener("DOMContentLoaded", function () {
+               window.ApexCharts && (new ApexCharts(document.getElementById('chart-tasks-overview'), {
+                   chart: {
+                       type: "line",
+                       fontFamily: 'inherit',
+                       height: 240,
+                       parentHeightOffset: 0,
+                       toolbar: {
+                           show: false,
+                       },
+                       animations: {
+                           enabled: true
+                       },
+                       
+                   },
+                   plotOptions: {
+                       bar: {
+                           columnWidth: '50%',
+                       }
+                   },
+                   dataLabels: {
+                       enabled: false,
+                   },
+                   fill: {
+                       opacity: 1,
+                   },
+                   stroke: {
+                   width: 2,
+                   lineCap: "round",
+                   curve: "smooth",
+                 },
+                   series: [{
+                       name: "Expenses",
+                      
+                       data: dataArray
+                   }],
+                   grid: {
+                       padding: {
+                           top: -20,
+                           right: 0,
+                           left: -4,
+                           bottom: -4
+                       },
+                       strokeDashArray: 4,
+                   },
+                   xaxis: {
+                       labels: {
+                           padding: 0,
+                       },
+                       tooltip: {
+                           enabled: false
+                       },
+                       axisBorder: {
+                           show: false,
+                       },
+                     
+                     
+                       categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+                   },
+                   yaxis: {
+                       labels: {
+                                   formatter: function(number) {
+                                       var SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
+                                 // what tier? (determines SI symbol)
+                                   var tier = Math.log10(Math.abs(number)) / 3 | 0;
+       
+                               // if zero, we don't need a suffix
+                               if(tier == 0) return number;
+       
+                               // get suffix and determine scale
+                               var suffix = SI_SYMBOL[tier];
+                               var scale = Math.pow(10, tier * 3);
+       
+                               // scale the number
+                               var scaled = number / scale;
+       
+                               // format number and add suffix
+                               return 'QAR ' + scaled.toFixed(1) + suffix;
+                                   }
+                               },
+                   },
+                   colors: ["#f59f00"],
+                   legend: {
+                       show: false,
+                   },
+               })).render();
+           });
+           // @formatter:on
+         </script>
+          
         <%- include("partial/footer") -%>

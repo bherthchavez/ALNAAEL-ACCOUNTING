@@ -352,10 +352,11 @@
                     <div class="row align-items-center">
                       <div class="col"></div>
                       <div class="col-auto">
-                        <a href="/supplier-accounts" class="btn">
+                        <a href="/supplier-accounts" class="btn cancelBill">
                           Cancel
                         </a>
                         <button type="submit" class="btn btn-primary ms-3" id="add_btn">
+                         
                           Save
                         </>
                        </form>
@@ -372,8 +373,14 @@
         </div>
       </div>
     </div>
-
-     <%- include("create/modals") -%>
+    
+     <script>
+      $(document).ready(function(){
+        $(".cancelBill").on("click", function(){
+          $(".cancelBill").prepend('<span class="spinner-border spinner-border-sm me-2" role="status"></span> ');
+        })
+      });
+      </script>
 
      <script>
       $(function () {

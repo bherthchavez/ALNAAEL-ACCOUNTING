@@ -260,12 +260,12 @@
                           
 
                             <form action="/create-supplier-bill" method="post">
-                              <button type="submit" name="accountID" value="<%=account._id%>" class="btn btn-outline-success btn-sm btn-pill"> Create Bill </button>
+                              <button type="submit" id="createBill<%=account._id%>" name="accountID" value="<%=account._id%>" class="btn btn-outline-success btn-sm btn-pill"> Create Bill </button>
                             </form>
                           
                     
                             <form action="/pay-supplier-bill" method="post">
-                              <button type="submit" name="accountID" value="<%=account._id%>" class="btn btn-outline-warning btn-sm btn-pill ms-2"> Pay Bill </button> 
+                              <button type="submit" id="payBill<%=account._id%>" name="accountID" value="<%=account._id%>" class="btn btn-outline-warning btn-sm btn-pill ms-2"> Pay Bill </button> 
                             </form>
                           </div>
                           </td>
@@ -352,13 +352,13 @@
                                         <!-- <div class="mb-3"> -->
                                           <div>
                                             <div class="form-floating">
-                                              <select class="form-select" name="status" id="floatingSelect" aria-label="Floating label select example">
+                                              <select class="form-select" name="status" id="floatingSelect<%=account._id%>" aria-label="Floating label select example">
                                                
                                                 <option value="1"<%=account.active_status==='1' ? 'selected' : '' %>>Active</option>
                                                 <option value="0"<%=account.active_status==='0' ? 'selected' : '' %>>Inactive</option>
                                               </select>
 
-                                              <label for="floatingSelect">Status</label>
+                                              <label for="floatingSelect<%=account._id%>">Status</label>
                                             </div>
                                           </div>
                                         <!-- </div> -->
@@ -415,6 +415,22 @@
                             </div>
                           </div>
                           </div>
+
+                          <script>
+                            $(document).ready(function(){
+                          
+                  
+                              $("#createBill<%=account._id%>").on("click", function(){
+                                $("#createBill<%=account._id%>").prepend('<span class="spinner-border spinner-border-sm me-2" role="status"></span> ');
+                  
+                              })
+                              $("#payBill<%=account._id%>").on("click", function(){
+                                $("#payBill<%=account._id%>").prepend('<span class="spinner-border spinner-border-sm me-2" role="status"></span> ');
+                            
+                              })
+                              
+                            });
+                            </script>
                           
 
                         <%  }) %>
@@ -431,7 +447,7 @@
             </div>
           </div>
         </div>
-
+     
       
         <script>
           $(document).ready(function(){
@@ -441,6 +457,16 @@
                 $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
               });
             });
+
+            $("#createBill").on("click", function(){
+              $("#createBill").prepend('<span class="spinner-border spinner-border-sm me-2" role="status"></span> ');
+
+            })
+            $("#payBill").on("click", function(){
+              $("#payBill").prepend('<span class="spinner-border spinner-border-sm me-2" role="status"></span> ');
+          
+            })
+            
           });
           </script>
 
