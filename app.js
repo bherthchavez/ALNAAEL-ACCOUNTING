@@ -464,12 +464,45 @@ app.get("/",(req,res)=>{
   
 
   if (req.isAuthenticated()){
-    payment_voucher.find({}, function(err, foundItem){
+    payment_voucher.find().sort({created_at:-1}).exec( function(err, foundItem){
       if (err){
         console.log(err);
       }else{
-        res.render("index",{voucherItems: foundItem, userName: req.user.name, userRole: req.user.userRole, alert: alert});
-      alert=0;
+
+        cost_center.aggregate([
+          {
+            "$lookup": {
+              "from": "bill_items",
+              "localField": "cost_center",
+              "foreignField": "cost_center",
+              "as": "bill_items"
+             }
+          },
+          
+          {
+            "$project": {
+              "cost_center":   1,
+                 "date": "$bill_items.inv_date",
+                 "total": "$bill_items.sub_total",
+              "subTotal": { "$sum": "$bill_items.sub_total"
+              },
+             
+            }
+          },
+          { "$sort": { "subTotal": -1 } }
+         
+        ], function(errCc, foundcC){
+          if(errCc){
+            console.log(errCc);
+          }else{
+
+          // console.log(foundcC);
+
+              res.render("index",{foundcC:foundcC, voucherItems: foundItem, userName: req.user.name, userRole: req.user.userRole, alert: alert});
+            alert=0;
+          }
+        })
+
       }
       
     });
@@ -1165,7 +1198,6 @@ app.post("/supplier-billed", (req,res) =>{
     res.redirect("/sign-in");
   }
 });
-
 
 
 app.get("/voucher-item", (req,res) =>{

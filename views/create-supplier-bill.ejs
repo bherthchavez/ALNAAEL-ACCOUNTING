@@ -300,7 +300,7 @@
                                               <select name="costCenter" class="form-select" required>
                                                 <option value="">--</option>
                                                 <%  costCenter.forEach(function(account) { %>
-                                                <option value="<%=account.cost_center%> "><%=account.cost_center%></option>
+                                                <option value="<%=account.cost_center%>"><%=account.cost_center%></option>
                                                 <%  }) %>
                                               </select>
                                             </td>
@@ -395,7 +395,7 @@
             cols +=  '<td><select class="form-select" name="item" required><option value="" selected>--</option>';
             
                         "<%  chartAccounts.forEach(function(account) { %>"
-            cols+=   '<option value="<%=account.name%>"><%=account.name%> </option>';
+            cols+=   '<option value="<%=account.name%>"><%=account.name%></option>';
                         "<%  }) %>"
 
             cols +=  '</select> </td> <td ><input type="text" name="itemDesc" class="form-control" required /></td>';
@@ -403,7 +403,7 @@
             cols +=  '<td><select class="form-select" name="costCenter" required><option value="" selected>--</option>';
 
                        "<%  costCenter.forEach(function(account) { %>"
-            cols+=   '<option value="<%=account.cost_center%>"><%=account.cost_center%> </option> ';
+            cols+=   '<option value="<%=account.cost_center%>"><%=account.cost_center%></option> ';
                        "<%  }) %>"
 
             cols +=  '</select> </td> <td ><input type="text" name="invNo" class="form-control" required /></td>';
