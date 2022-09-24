@@ -97,7 +97,19 @@
                 </h2>
               </div>
               <!-- Page title actions -->
-           
+              <div class="col-12 col-md-auto ms-auto d-print-none">
+                <div class="btn-list">
+            
+                  <a href="#" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-report">
+                  
+                    <i class="ti ti-file-plus  fs-3 me-2"></i>
+                    New Transaction
+                  </a>
+                  <!-- <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
+                    <i class="ti ti-file-invoice fs-3"></i> 
+                  </a> -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -358,7 +370,7 @@
                               <%=item.created_by%>
                             </td>
                             <td>
-                              <span class="status status-red  fs-5">
+                              <span class="status status-red fs-5">
                                 <%= (item.status)%>
                               </span>
                             </td>

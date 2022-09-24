@@ -357,6 +357,7 @@ const supplier1 = new supplier_account({
   paid: 0,
   balance_amount: 0,
   active_status: 1,
+  created_bills: 0,
   created_by: "Admin",
   created_at: Date.now(),
   updated_at: Date.now()
@@ -379,6 +380,7 @@ const supplier2 = new supplier_account({
   paid: 0,
   balance_amount: 0,
   active_status: 1,
+  created_bills: 0,
   created_by: "Admin",
   created_at: Date.now(),
   updated_at: Date.now()
@@ -1184,7 +1186,7 @@ app.post("/supplier-billed", (req,res) =>{
                       });
                   }); 
   
-                  alert = 4;
+                  alert = 5;
                   res.redirect("supplier-accounts");
                 }
             });
@@ -1357,7 +1359,7 @@ app.post("/bank-accounts", (req, res)=>{
     balance_amount: balanceAmount,
     created_by: req.user.name,
     created_at: Date.now(),
-    updated_at: Date.Now()
+    updated_at: Date.now()
   });
   account.save();
   alert = 1;

@@ -4,32 +4,19 @@
 
   <script>
     var getAlert = "<%= alert %>";
-      if(getAlert == 1){
-      $(".alert-notif" ).addClass("alert-visible alert-green");
-      $("div .alert-msg").text("Bank Account is successfully added."); 
-      
-      setTimeout(function () {
-          $(".alert-notif ").removeClass("alert-visible alert-green");
-        }, 4000);
+    if(getAlert == 1){
+  $(".alert-notif2").append('<div class="alert alert-success alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-success fs-1 me-3"> <i class="ti ti-check"></i></div> <div><h4 class="alert-title">Added</h4> <div class="text-muted">Account is successfully added!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
 
     }else if(getAlert == 2) {
-
-      $(".alert-notif " ).addClass("alert-visible alert-red");
-      $("div .alert-msg ").text("Bank Account is successfully deleted."); 
+      $(".alert-notif2").append('<div class="alert alert-danger alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-danger fs-1 me-3"> <i class="ti ti-alert-circle"></i></div> <div><h4 class="alert-title">Deleted</h4> <div class="text-muted">Account is successfully deleted!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
     
-        setTimeout(function () {
-          $(".alert-notif ").removeClass("alert-visible alert-red");
-        }, 4000);
-
     }else if(getAlert == 3) {
+      $(".alert-notif2").append('<div class="alert alert-info alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-info fs-1 me-3"> <i class="ti ti-info-circle"></i></div><div><h4 class="alert-title">Updated</h4> <div class="text-muted">Account is successfully updated!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
 
-    $(".alert-notif " ).addClass("alert-visible alert-green");
-    $("div .alert-msg ").text("Bank Account is successfully updated."); 
-
-      setTimeout(function () {
-        $(".alert-notif ").removeClass("alert-visible alert-green");
-      }, 4000);
     }
+  setTimeout(function () {  
+    $(".ccUpdated").remove();
+   }, 5000);
   </script>
    
 
