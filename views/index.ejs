@@ -1,6 +1,34 @@
 
 <%- include("partial/header") -%>
 
+<script>
+  var getAlert = "<%= alert %>";
+   if(getAlert == 1){
+   $(".alert-notif2").append('<div class="alert alert-success alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-success fs-1 me-3"> <i class="ti ti-check"></i></div> <div><h4 class="alert-title">Added</h4> <div class="text-muted">Account is successfully added!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
+
+
+   }else if(getAlert == 2) {
+     $(".alert-notif2").append('<div class="alert alert-danger alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-danger fs-1 me-3"> <i class="ti ti-alert-circle"></i></div> <div><h4 class="alert-title">Deleted</h4> <div class="text-muted">Account is successfully deleted!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
+
+
+   }else if(getAlert == 3) {
+     $(".alert-notif2").append('<div class="alert alert-info alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-info fs-1 me-3"> <i class="ti ti-info-circle"></i></div><div><h4 class="alert-title">Updated</h4> <div class="text-muted">Account is successfully updated!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
+
+
+   }else if(getAlert == 4) {
+     $(".alert-notif2").append('<div class="alert alert-success alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-success fs-1 me-3"> <i class="ti ti-check"></i></div> <div><h4 class="alert-title">Bill Created</h4> <div class="text-muted">Bill is successfully created!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
+
+   }else if(getAlert == 5) {
+
+   $(".alert-notif2").append('<div class="alert alert-warning alert-dismissible btn-sm ccUpdated" role="alert"><div class="d-flex"><div class="text-warning fs-1 me-3"> <i class="ti ti-building-bank"></i></div> <div><h4 class="alert-title">Payment Created</h4> <div class="text-muted">Payment Voucher is successfully created!</div></div> </div>  <a class="btn-close" data-bs-dismiss="alert" aria-label="close"></a> </div>');
+
+   }
+
+ setTimeout(function () {  
+ $(".ccUpdated").remove();
+}, 5000);
+</script>
+
       <div class="navbar-expand-md">
         <div class="collapse navbar-collapse" id="navbar-menu">
           <div class="navbar navbar-light">
@@ -98,21 +126,71 @@
               </div>
               <!-- Page title actions -->
               <div class="col-12 col-md-auto ms-auto d-print-none">
-                <div class="btn-list">
-            
-                  <a href="#" class="btn btn-light" data-bs-toggle="modal" data-bs-target="#modal-report">
-                  
-                    <i class="ti ti-file-plus  fs-3 me-2"></i>
-                    New Transaction
-                  </a>
-                  <!-- <a href="#" class="btn btn-primary d-sm-none btn-icon" data-bs-toggle="modal" data-bs-target="#modal-report" aria-label="Create new report">
-                    <i class="ti ti-file-invoice fs-3"></i> 
-                  </a> -->
-                </div>
+                  <div class="dropdown btn-list">
+                    <button type="button" class="btn dropdown-toggle text-muted " data-bs-toggle="dropdown">
+                      <i class="ti ti-file-plus  fs-3 me-2"></i> New Transaction
+                    </button>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item text-muted mt-1" data-bs-toggle="offcanvas" href="#offcanvasStart" role="button" aria-controls="offcanvasStart"> <i class="ti ti-file-invoice fs-3 me-2"></i>
+                        Create Bill 
+                      </a>
+                      <a class="dropdown-item text-muted mt-1" data-bs-toggle="offcanvas" href="#offcanvasStart2" role="button" aria-controls="offcanvasStart"> 
+                        <i class="ti ti-building-bank fs-3 me-2"></i>
+                        Pay Supplier 
+                      </a>
+                       
+                    </div>
+                  </div>
+
               </div>
             </div>
           </div>
+
+          <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart" aria-labelledby="offcanvasStartLabel">
+            <div class="offcanvas-header">
+              <h2 class="offcanvas-title" id="offcanvasStartLabel">Select Supplier</h2>
+              <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body">
+              <form id="billForm" name="billForm" action="/create-supplier-bill" method="post">
+  
+                <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
+  
+                  <%suppFound.forEach(function(supp){%>
+  
+                  <label class="form-selectgroup-item flex-fill">
+                    <input type="radio" name="form-payment" value="<%=supp._id%>" class="form-selectgroup-input" required/>
+                    <div class="form-selectgroup-label d-flex align-items-center p-3">
+                      <div class="me-3">
+                        <span class="form-selectgroup-check"></span>
+                      </div>
+                      <div>
+                         <%=supp.supplier_name%>
+                      </div>
+                    </div>
+                  </label>
+  
+                  <%})%>
+  
+                </div>
+             
+              <div class="mt-4 text-end">
+                <input type="text" id="selelectedSupp" name="accountID" class="form-control" hidden>
+  
+                  <button type="submit" class="btn btn-primary w-50 fs-3 " >
+                  Create bill <i class="ti ti-chevron-right fs-3 ms-2"></i>
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            
         </div>
+      </div>
+
+        
+
+
         <div class="page-body">
           <div class="container-xl">
             <div class="row row-deck row-cards">
@@ -398,6 +476,96 @@
           </div>
         </div>
 
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasStart2" aria-labelledby="offcanvasStartLabel">
+          <div class="offcanvas-header">
+            <h2 class="offcanvas-title" id="offcanvasStartLabel">Select Supplier</h2>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+           
+              <div class="form-selectgroup form-selectgroup-boxes d-flex flex-column">
+              
+                <%  if(suppPay.length == 0){%>
+
+                  <div class="empty">
+                    <div class="empty-img"><img src="./static/illustrations/emptydocument-svgrepo-com.svg" height="128" alt="">
+                    </div>
+                    <p class="empty-title">No Bill Created </p>
+                    <p class="empty-subtitle text-muted">
+                     Create suppler purchase bill first.
+                    </p>
+                    <div class="empty-action">
+
+                      <a  class="btn btn-primary" data-bs-toggle="offcanvas" href="#offcanvasStart" role="button" aria-controls="offcanvasStart">
+                        <i class="ti ti-plus fs-4 fw-light me-2"></i>
+                       Create purchase bill
+                      </a>
+
+                    </div>
+                  </div>
+
+                  <% }else{%>
+
+                
+
+                <%suppPay.forEach(function(pay){%>
+
+                 
+                  <form id="payForm" name="payForm" action="/pay-supplier-bill" method="post">
+
+                    <label class="form-selectgroup-item flex-fill">
+                      <input type="radio" name="form-payment" value="<%=pay._id%>" class="form-selectgroup-input" required/>
+                      <div class="form-selectgroup-label d-flex align-items-center p-3">
+                        <div class="me-3">
+                          <span class="form-selectgroup-check"></span>
+                        </div>
+                        <div>
+                          <%=pay.supplier_name%>
+                          <a href="#" class="ms-1 fs-5" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-custom-class="custom-tooltip" data-bs-title="Bill Created">
+
+                          <span class="badge bg-orange ms-2"><%= parseFloat(pay.created_bills) %></span>
+                          </a>
+                        </div>
+                      </div>
+                    </label>
+                    <%})%>
+                    <div class="mt-4 text-end">
+                      <input type="text" id="selelectedPay" name="accountID" class="form-control" hidden>
+        
+                        <button type="submit" class="btn btn-primary w-50 fs-3 " >
+                        Pay Supplier <i class="ti ti-chevron-right fs-3 ms-2"></i>
+                        </button>
+                      </form>
+                    </div>
+                    
+                <%}%>
+               
+
+              </div>
+           
+          
+          </div>
+
+
+
+          
+        <script>
+            $(document).ready(function(){
+
+              $("#billForm").on("click",function() { 
+                var radVal =   $("input[name='form-payment']:checked").val();
+                    $("#selelectedSupp").val(radVal)
+                 
+                });
+
+                $("#payForm").on("click",function() { 
+                var radVal =   $("input[name='form-payment']:checked").val();
+                    $("#selelectedPay").val(radVal)
+                   
+                });
+          });
+         </script>
+
         <script>
           $(document).ready(function(){
             $("#searchPV").on("keyup", function() {
@@ -489,8 +657,16 @@
                window.ApexCharts && (new ApexCharts(document.getElementById('chart-tasks-overview'), {
                    chart: {
                        type: "line",
+                       dropShadow: {
+                                      enabled: true,
+                                      color: '#000',
+                                      top: 18,
+                                      left: 7,
+                                      blur: 10,
+                                      opacity: 0.3
+                                    },
                        fontFamily: 'inherit',
-                       height: 240,
+                       height: 260,
                        parentHeightOffset: 0,
                        toolbar: {
                            show: false,
@@ -500,13 +676,17 @@
                        },
                        
                    },
-                   plotOptions: {
-                       bar: {
-                           columnWidth: '50%',
-                       }
-                   },
+                  //  title: {
+                  //     text: 'Monthly Expenses ',
+                  //     align: 'left'
+                  //   },
+                  //  plotOptions: {
+                  //      bar: {
+                  //          columnWidth: '50%',
+                  //      }
+                  //  },
                    dataLabels: {
-                       enabled: false,
+                       enabled: true,
                    },
                    fill: {
                        opacity: 1,
@@ -517,7 +697,7 @@
                    curve: "smooth",
                  },
                    series: [{
-                       name: "Expenses",
+                       name: "Total Expenses",
                       
                        data: dataArray
                    }],
@@ -531,23 +711,33 @@
                        strokeDashArray: 4,
                    },
                    xaxis: {
+                   
+                      
                        labels: {
                            padding: 0,
                        },
                        tooltip: {
-                           enabled: false
+                           enabled: true
                        },
                        axisBorder: {
-                           show: false,
+                           show: true,
                        },
-                     
+                      
                      
                        categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                   },
+                       title: {
+                                text: 'Month'
+                              },
+                            
+                      },
+                    
                    yaxis: {
+                    title: {
+                              text: 'AMOUNT'
+                            },
                        labels: {
                                    formatter: function(number) {
-                                       var SI_SYMBOL = ["", "k", "M", "G", "T", "P", "E"];
+                                       var SI_SYMBOL = ["", "K", "M", "G", "T", "P", "E"];
                                  // what tier? (determines SI symbol)
                                    var tier = Math.log10(Math.abs(number)) / 3 | 0;
        

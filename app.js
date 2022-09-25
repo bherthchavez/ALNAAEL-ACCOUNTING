@@ -498,17 +498,31 @@ app.get("/",(req,res)=>{
             console.log(errCc);
           }else{
 
-          // console.log(foundcC);
+                supplier_account.find({}, function(errbill, suppFound){
+                  if(err){
+                    console.log(errbill)
+                  }else{
 
-              res.render("index",{foundcC:foundcC, voucherItems: foundItem, userName: req.user.name, userRole: req.user.userRole, alert: alert});
-            alert=0;
-          }
+                    supplier_account.find({created_bills:{ $gte: 1 } }, function(errpay, suppPay){
+                      if(err){
+                        console.log(errpay)
+                      }else{
+                        
+                          res.render("index",{suppPay:suppPay, suppFound:suppFound,foundcC:foundcC, voucherItems: foundItem, userName: req.user.name, userRole: req.user.userRole, alert: alert});
+                          alert=0;
+                        }
+                      })
+                  }
+                })
+             }
+          
         })
+        
 
       }
       
     });
-    // res.render("index", {userName: req.user.name, userRole: req.user.userRole});
+   
    }else{
     res.redirect("/sign-in");
    }
@@ -711,6 +725,16 @@ app.post("/create-voucher", (req,res) =>{
     res.redirect("/sign-in");
   }
 });
+app.post("/create-purchase-bill", (req,res) =>{
+  if (req.isAuthenticated()){
+
+    console.log(req.body.accountID)
+
+  }else{
+    res.redirect("/sign-in");
+  }
+
+});
 
 app.post("/create-supplier-bill", (req,res) =>{
   if (req.isAuthenticated()){
@@ -724,35 +748,62 @@ app.post("/create-supplier-bill", (req,res) =>{
             if (err){
               console.log(err);
             }else{
-            supplier_account.findOne({_id: req.body.accountID}, function(err, foundItem){
-              if (err){
-                console.log(err);
-              }else{
-                supplier_bill.find({supplier_id: foundItem._id, status: "Pending"}, function(err, foundBill){
-                  if (err){
-                    console.log(err);
-                  }else{
-                  
-                    settings.findOne({name: "bill_settings"}, function(err, billSetting){
-                      if (err) {
-                        console.log(err);
-                      }else{
-                        let puvno = billSetting.prefix + billSetting.starting_no;
-                        res.render("create-supplier-bill", {puvno: puvno, chartAccounts: chartOfAccount, costCenter: costCenter,
-                          suppBills: foundBill,
-                          accountID:foundItem._id,
-                          supplierName: foundItem.supplier_name, 
-                          aName: foundItem.a_name, 
-                          userName: req.user.name, 
-                          userRole: req.user.userRole });
-                      }
-                    
-                    });
-                  }
-                });
-              }
-            });
 
+                  // supplier_account.findOne({_id: req.body.accountID}, function(err, foundItem){
+                  //   if (err){
+                  //     console.log(err);
+                  //   }else{
+                  //     supplier_bill.find({supplier_id: foundItem._id, status: "Pending"}, function(err, foundBill){
+                  //       if (err){
+                  //         console.log(err);
+                  //       }else{
+                        
+                  //         settings.findOne({name: "bill_settings"}, function(err, billSetting){
+                  //           if (err) {
+                  //             console.log(err);
+                  //           }else{
+                  //             let puvno = billSetting.prefix + billSetting.starting_no;
+                  //             res.render("create-supplier-bill", {puvno: puvno, chartAccounts: chartOfAccount, costCenter: costCenter,
+                  //               suppBills: foundBill,
+                  //               accountID:foundItem._id,
+                  //               supplierName: foundItem.supplier_name, 
+                  //               aName: foundItem.a_name, 
+                  //               userName: req.user.name, 
+                  //               userRole: req.user.userRole });
+                  //           }
+                          
+                  //         });
+                  //       }
+                  //     });
+                  //   }
+                  // });
+
+                  supplier_account.findOne({_id: req.body.accountID}, function(err, foundItem){
+                    if (err){
+                      console.log(err);
+                    }else{
+
+                      supplier_account.find({}, function(err, foundSupplier){
+                        
+                          settings.findOne({name: "bill_settings"}, function(err, billSetting){
+                            if (err) {
+                              console.log(err);
+                            }else{
+                              let puvno = billSetting.prefix + billSetting.starting_no;
+                              res.render("create-purchase-bill", {foundSupplier:foundSupplier, puvno: puvno, chartAccounts: chartOfAccount, costCenter: costCenter,
+                                
+                                accountID:foundItem._id,
+                                supplierName: foundItem.supplier_name, 
+                                aName: foundItem.a_name, 
+                                userName: req.user.name, 
+                                userRole: req.user.userRole });
+                            }
+                          
+                          });
+                        });
+                    }
+                  });
+              
             }
           });
         }
@@ -827,11 +878,15 @@ app.post("/pay-supplier-bill", (req,res) =>{
 app.post("/supplier-bill", (req,res)=>{
   if (req.isAuthenticated()){
 
+
+    supplier_account.findOne({_id:req.body.supplierID}, function(err, foundSupplier){
+
+      
         const totalPayment = + (req.body.totalPayment).split(',').join('');
 
         const bill = new supplier_bill({
-          supplier_id:  req.body.accountID,
-          supplier_name: req.body.supplierName,
+          supplier_id:  req.body.supplierID,
+          supplier_name: foundSupplier.supplier_name,
           bill_number: req.body.puvNo,
           bill_date:  req.body.date,
           documents:  req.body.documents,
@@ -905,12 +960,8 @@ app.post("/supplier-bill", (req,res)=>{
              let totalBilled = 0;
       
        
-             supplier_account.findOne({_id: req.body.accountID}, function(err, foundItem){ 
-             if (err){
-               console.log(err);
-             }else{
 
-                  supplier_bill.find({supplier_id: req.body.accountID, status: 'Pending' }, function(err, supBills){ 
+                  supplier_bill.find({supplier_id: req.body.supplierID, status: 'Pending' }, function(err, supBills){ 
              
                   
                  
@@ -918,12 +969,12 @@ app.post("/supplier-bill", (req,res)=>{
                       console.log(err)
                     }else{
 
-                      totalBilled = + foundItem.billed;
+                      totalBilled = + foundSupplier.billed;
                         
                       totalBilled += +(req.body.totalPayment).split(',').join('');
                   
                         
-                      supplier_account.findOneAndUpdate({_id: req.body.accountID},
+                      supplier_account.findOneAndUpdate({_id: req.body.supplierID},
                           {$set: {
                           billed: totalBilled,
                           created_bills: supBills.length }}, function(err){
@@ -936,8 +987,8 @@ app.post("/supplier-bill", (req,res)=>{
 
                   });
 
-                 }
-              });
+                 
+             
 
                   
              settings.findOne({name: "bill_settings"}, function(err, billSetting){
@@ -953,8 +1004,8 @@ app.post("/supplier-bill", (req,res)=>{
         });
 
         alert = 4;
-        res.redirect("/supplier-accounts")
-
+        res.redirect("/")
+    });
   }else{
     res.redirect("/sign-in");
   }
